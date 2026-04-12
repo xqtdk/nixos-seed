@@ -20,7 +20,7 @@ The configuration is structured to support multiple hosts (machines).
 
 ## 3. Creating and Configuring a Host
 
-It is recommended to copy `hosts/template` to create a new host configuration.
+It is recommended to copy `hosts/desktop` to create a new host configuration.
 
 ### Step A: Generate Hardware Configuration
 

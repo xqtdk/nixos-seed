@@ -69,7 +69,7 @@ variables.nix  →  flake.nix (specialArgs / extraSpecialArgs)
 
 ### 3.1 新規ホストの追加
 
-1.  **ディレクトリ作成**: `hosts/template`（または既存の `hosts/desktop`）を `hosts/{hostname}` にコピー。
+1.  **ディレクトリ作成**: 既存の `hosts/desktop` を `hosts/{hostname}` にコピー。
 2.  **共有変数の調整**: `hosts/{hostname}/variables.nix` を編集（デスクトップ環境フラグ等）。
 3.  **ローカル変数の調整**: `configuration.nix` の `username` / `hostname` 等、`home.nix` の `gitEmail` 等を編集。
 4.  **ハードウェア定義**: インストール先で `nixos-generate-config` を実行し、`hardware-configuration.nix` を配置。
@@ -114,4 +114,4 @@ variables.nix  →  flake.nix (specialArgs / extraSpecialArgs)
 ### 4.1 システム設定 vs ユーザー設定
 
 - **NixOS (configuration.nix)**: ハードウェア、ドライバー、システムサービス、ユーザーアカウント管理、フォント、システムレベルでの DE 有効化フラグ。
-- **Home Manager (home.nix / config/DE/)**: ユーザー固有のパッケージ、アプリケーションの詳細設定、テーマ、DE 内部の構成。
+- **Home Manager (home.nix / modules/DE/)**: ユーザー固有のパッケージ、アプリケーションの詳細設定、テーマ、DE 内部の構成。
