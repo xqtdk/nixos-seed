@@ -2,6 +2,8 @@
 # Desktop Shared Variables / デスクトップ共通変数
 # configuration.nix・home.nix・flake.nix の全モジュールで参照される
 # 設定値をここで一元管理する
+#
+# ★ 初回セットアップ時はこのファイルのみ編集してください
 # =============================================================================
 
 {
@@ -14,11 +16,25 @@
   userDisplayName = "Tsudzuki";
 
   # ---------------------------------------------------------------------------
+  # System Settings / システム設定
+  # ---------------------------------------------------------------------------
+  # NixOSホスト名（networking.hostName / nixos-rebuild switch --flake .#<name> と一致させる）
+  hostname     = "desktop";
+  # タイムゾーン（timedatectl list-timezones で一覧確認）
+  timeZone     = "Asia/Tokyo";
+  # NixOSステートバージョン（インストール時点のリリースを指定し、以後変更しない）
+  stateVersion = "25.11";
+
+  # ---------------------------------------------------------------------------
   # Desktop Environment / デスクトップ環境
   # ---------------------------------------------------------------------------
   enableGnome = true;
-  enableKde   = true;
+  enableKde   = false;
   enableNiri  = true;
+
+  # ログインマネージャー: "tuigreet" | "gdm" | "sddm" | "regreet" | "lemurs"
+  # 不正な値を指定するとビルド時にエラーが発生します
+  displayManager = "tuigreet";
 
   # ---------------------------------------------------------------------------
   # Input Method / 入力メソッド

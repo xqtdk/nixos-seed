@@ -24,21 +24,31 @@ It is recommended to copy `hosts/desktop` to create a new host configuration.
 
 ### Step A: Generate Hardware Configuration
 
-Run the following on the target machine:
+`hosts/desktop/hardware-configuration.nix` is included as a placeholder.
+Run the following on the target machine to overwrite it:
 
 ```bash
 nixos-generate-config --show-hardware-config > hosts/<your-host-name>/hardware-configuration.nix
 ```
 
+> [!WARNING]
+> If you skip this step and run `nixos-rebuild switch`, the placeholder settings will be used and the system may not boot correctly on real hardware.
+
 ### Step B: Adjust Variables and Settings
 
-Edit **`variables.nix`** to configure the username and desktop environment settings:
+**All primary customization is done in `variables.nix`.**
+Review and edit the following settings:
 
 - `username`, `userDisplayName`: Linux account name and display name
+- `hostname`: Host name (must match the host definition name in `flake.nix`)
+- `timeZone`: Time zone (e.g., `"Asia/Tokyo"`, `"UTC"`)
+- `stateVersion`: NixOS release version (set at install time and do not change afterward)
 - `enableGnome`, `enableKde`, `enableNiri`: Toggle switches for desktop environments
+- `displayManager`: Login manager (`"tuigreet"` / `"gdm"` / `"sddm"` / `"regreet"` / `"lemurs"`)
+  - Setting an invalid value will cause a build-time error
 - `enableMozc`, `fcitx5Layout`: Input method settings
 
-Then edit the local variables in `configuration.nix` (`hostname`, etc.) and `home.nix` (`gitEmail`, etc.).
+Build-specific local variables (e.g., `isVM` in `configuration.nix`) and user-specific settings (e.g., `gitEmail` in `home.nix`) should still be edited in their respective files.
 
 ### Step C: Host-Specific Settings
 

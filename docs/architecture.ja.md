@@ -47,13 +47,17 @@ graph TD
 
 ### 2.2 変数管理
 
-`configuration.nix`、`home.nix`、`flake.nix` の複数ファイルで参照する共有設定値（`username`、`userDisplayName`、`enableGnome` など）は `variables.nix` で一元管理し、`flake.nix` の `specialArgs` / `extraSpecialArgs` 経由で各モジュールに配布します。各ファイル固有の設定（`hostname`、`gitEmail` など）は引き続き各ファイルの `let` 句で定義します。
+`configuration.nix`、`home.nix`、`flake.nix` の複数ファイルで参照する共有設定値（`username`、`userDisplayName`、`hostname`、`timeZone`、`stateVersion`、`enableGnome`、`displayManager` など）は `variables.nix` で一元管理し、`flake.nix` の `specialArgs` / `extraSpecialArgs` 経由で各モジュールに配布します。各ファイル固有の設定（`isVM`、`gitEmail` など）は引き続き各ファイルの `let` 句で定義します。
 
-```
-variables.nix  →  flake.nix (specialArgs / extraSpecialArgs)
-                       ├─ configuration.nix  (関数引数で受け取る)
-                       └─ home.nix           (関数引数で受け取る)
-```
+> [!NOTE]
+> `variables.nix` は「初回セットアップ時に必ず確認する場所」を意圖して設計されています。
+> `hostname`、`timeZone`、`stateVersion`、`displayManager` などシステム全体に関わる値は全てここで管理します。
+
+    ```
+    variables.nix  →  flake.nix (specialArgs / extraSpecialArgs)
+                           ├─ configuration.nix  (関数引数で受け取る: username, hostname, timeZone, stateVersion, displayManager ...)
+                           └─ home.nix           (関数引数で受け取る: username, stateVersion, enableGnome ...)
+    ```
 
 ### 2.3 モジュールの分散管理 (Modular DE Config)
 
@@ -105,7 +109,7 @@ variables.nix  →  flake.nix (specialArgs / extraSpecialArgs)
 3.  **各ファイルで使用**: 通常の変数と同様に参照する。
 
 > [!NOTE]
-> `configuration.nix` か `home.nix` の**片方だけ**で使うフラグはそのファイルの `let` 句で直接定義するほうが簡潔です。`variables.nix` には両ファイルで共有するものだけを置いてください。
+> `configuration.nix` か `home.nix` の**片方だけ**で使う変数はそのファイルの `let` 句で直接定義するほうが簡潔です。`variables.nix` には両ファイルで共有するものだけを置いてください。
 
 ---
 

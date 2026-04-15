@@ -2,15 +2,15 @@
 # NixOS System Configuration / NixOSシステム設定
 # =============================================================================
 
-{ config, pkgs, lib, username, userDisplayName, enableGnome, enableKde, enableNiri, enableMozc, fcitx5Layout, ... }:
+{ config, pkgs, lib, username, userDisplayName, hostname, timeZone, stateVersion, enableGnome, enableKde, enableNiri, enableMozc, fcitx5Layout, displayManager, ... }:
 
 let
   # ---------------------------------------------------------------------------
-  # Basic Settings / 基本設定・ユーザー名は variables.nix を参照
+  # Basic Settings / 基本設定
   # ---------------------------------------------------------------------------
-  # username, userDisplayName は variables.nix で定義され specialArgs 経由で渡される
-  hostname = "desktop";
-  timeZone = "Asia/Tokyo";
+  # hostname, timeZone, stateVersion, displayManager は variables.nix で定義され
+  # specialArgs 経由で渡される
+  # username, userDisplayName も同様に variables.nix で管理
   defaultLocale = "en_US.UTF-8";
   extraLocale = "ja_JP.UTF-8";
 
@@ -21,17 +21,20 @@ let
   # ---------------------------------------------------------------------------
   # Desktop Environment / デスクトップ環境
   # ---------------------------------------------------------------------------
-  # enableGnome, enableKde, enableNiri, enableMozc, fcitx5Layout は
+  # enableGnome, enableKde, enableNiri, enableMozc, fcitx5Layout, displayManager は
   # hosts/desktop/variables.nix で定義され、specialArgs 経由で渡される
-
-  # Display Manager: "tuigreet", "gdm", "sddm", "regreet", "lemurs"
-  displayManager = "tuigreet";
 
   # ---------------------------------------------------------------------------
   # Input Method / 入力メソッド
   # ---------------------------------------------------------------------------
   # enableMozc, fcitx5Layout は variables.nix で定義
 in
+
+# displayManager の値バリデーション（不正な値を指定するとビルド時にエラーが出ます）
+assert lib.assertMsg
+  (lib.elem displayManager [ "tuigreet" "gdm" "sddm" "regreet" "lemurs" ])
+  ''displayManager の値が無効です: "${displayManager}"。variables.nix で "tuigreet", "gdm", "sddm", "regreet", "lemurs" のいずれかを指定してください。'';
+
 {
   imports = [
     # hardware-configuration.nix が見つからない場合は、
@@ -202,7 +205,7 @@ in
   programs.nix-ld.enable = true;
 
   # System State / システムステート
-  system.stateVersion = "25.11";
+  system.stateVersion = stateVersion;
 
   nix = {
     settings = {

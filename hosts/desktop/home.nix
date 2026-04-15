@@ -2,13 +2,12 @@
 # Home Manager Configuration / Home Manager設定
 # =============================================================================
 
-{ pkgs, lib, username, enableGnome, enableKde, enableNiri, enableMozc, fcitx5Layout, ... }:
+{ pkgs, lib, username, stateVersion, enableGnome, enableKde, enableNiri, enableMozc, fcitx5Layout, ... }:
 
 let
-  # username は variables.nix で定義され extraSpecialArgs 経由で渡される
+  # username, stateVersion は variables.nix で定義され extraSpecialArgs 経由で渡される
   gitUsername = "xqtdk";
   gitEmail    = "271062236+xqtdk@users.noreply.github.com";
-  stateVersion = "25.11";
 
   # ---------------------------------------------------------------------------
   # Desktop Settings / デスクトップ環境設定
@@ -75,7 +74,7 @@ in
     mangohud xdg-utils nnn pcmanfm
 
     # Applications / アプリケーション
-    firefox vivaldi vesktop motrix aria2
+    firefox brave vesktop motrix
 
     # Wine
     wineWow64Packages.full
