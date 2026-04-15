@@ -32,12 +32,13 @@ nixos-generate-config --show-hardware-config > hosts/<your-host-name>/hardware-c
 
 ### Step B: Adjust Variables and Settings
 
-Edit **`variables.nix`** to configure the shared flags for desktop environments:
+Edit **`variables.nix`** to configure the username and desktop environment settings:
 
+- `username`, `userDisplayName`: Linux account name and display name
 - `enableGnome`, `enableKde`, `enableNiri`: Toggle switches for desktop environments
 - `enableMozc`, `fcitx5Layout`: Input method settings
 
-Then edit the local variables in `configuration.nix` (`username`, `hostname`, etc.) and `home.nix` (`gitEmail`, etc.).
+Then edit the local variables in `configuration.nix` (`hostname`, etc.) and `home.nix` (`gitEmail`, etc.).
 
 ### Step C: Host-Specific Settings
 

@@ -42,7 +42,8 @@
           {
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
-            home-manager.users.xqtdk = import ./hosts/desktop/home.nix;
+            # ユーザー名は variables.nix の username を参照（動的属性名）
+            home-manager.users = { ${desktopVars.username} = import ./hosts/desktop/home.nix; };
             home-manager.backupFileExtension = "backup";
             home-manager.extraSpecialArgs = { inherit inputs; } // desktopVars;
           }

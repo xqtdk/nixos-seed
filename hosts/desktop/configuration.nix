@@ -2,14 +2,13 @@
 # NixOS System Configuration / NixOSシステム設定
 # =============================================================================
 
-{ config, pkgs, lib, enableGnome, enableKde, enableNiri, enableMozc, fcitx5Layout, ... }:
+{ config, pkgs, lib, username, userDisplayName, enableGnome, enableKde, enableNiri, enableMozc, fcitx5Layout, ... }:
 
 let
   # ---------------------------------------------------------------------------
-  # Basic Settings / 基本設定
+  # Basic Settings / 基本設定・ユーザー名は variables.nix を参照
   # ---------------------------------------------------------------------------
-  username = "xqtdk";
-  userDescription = "xqtdk";
+  # username, userDisplayName は variables.nix で定義され specialArgs 経由で渡される
   hostname = "desktop";
   timeZone = "Asia/Tokyo";
   defaultLocale = "en_US.UTF-8";
@@ -181,7 +180,7 @@ in
   # ===========================================================================
   users.users.${username} = {
     isNormalUser = true;
-    description = userDescription;
+    description = userDisplayName;
     extraGroups = [ "networkmanager" "wheel" "libvirtd" ];
     shell = pkgs.nushell;
   };

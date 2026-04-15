@@ -32,7 +32,7 @@ graph TD
 | コンポーネント      | 役割                                               | 定義方法                              | 出力                     |
 | :------------------ | :------------------------------------------------- | :------------------------------------ | :----------------------- |
 | `flake.nix`         | 全体の統合、ホストのインスタンス化                 | `nixosConfigurations.{name}`          | NixOS システム定義       |
-| `variables.nix`     | 複数ファイルで共有される設定フラグの一元管理       | `specialArgs` / `extraSpecialArgs` 経由で配布 | 共有変数                 |
+| `variables.nix`     | 複数ファイルで共有される設定値の一元管理（ユーザー名・DEフラグ等） | `specialArgs` / `extraSpecialArgs` 経由で配布 | 共有変数                 |
 | `configuration.nix` | システム権限設定（Boot, HW, Network, Users）       | 関数引数 + `let` 句でローカル変数定義 | NixOS システムオプション |
 | `home.nix`          | ユーザー環境設定（Dotfiles, User Packages）        | 関数引数 + `let` 句でローカル変数定義 | Home Manager オプション  |
 | `modules/DE/`       | デスクトップ環境固有の構成（HM設定、アセットなど） | 各ディレクトリ内の `default.nix`      | 独立した構成モジュール   |
@@ -47,7 +47,7 @@ graph TD
 
 ### 2.2 変数管理
 
-`configuration.nix` と `home.nix` の両方で参照する共有フラグ（`enableGnome` など）は `variables.nix` で一元管理し、`flake.nix` の `specialArgs` / `extraSpecialArgs` 経由で各モジュールに配布します。各ファイル固有の設定（`username`、`gitEmail` など）は引き続き各ファイルの `let` 句で定義します。
+`configuration.nix`、`home.nix`、`flake.nix` の複数ファイルで参照する共有設定値（`username`、`userDisplayName`、`enableGnome` など）は `variables.nix` で一元管理し、`flake.nix` の `specialArgs` / `extraSpecialArgs` 経由で各モジュールに配布します。各ファイル固有の設定（`hostname`、`gitEmail` など）は引き続き各ファイルの `let` 句で定義します。
 
 ```
 variables.nix  →  flake.nix (specialArgs / extraSpecialArgs)
@@ -70,8 +70,8 @@ variables.nix  →  flake.nix (specialArgs / extraSpecialArgs)
 ### 3.1 新規ホストの追加
 
 1.  **ディレクトリ作成**: 既存の `hosts/desktop` を `hosts/{hostname}` にコピー。
-2.  **共有変数の調整**: `hosts/{hostname}/variables.nix` を編集（デスクトップ環境フラグ等）。
-3.  **ローカル変数の調整**: `configuration.nix` の `username` / `hostname` 等、`home.nix` の `gitEmail` 等を編集。
+2.  **共有変数の調整**: `hosts/{hostname}/variables.nix` を編集（`username`、`userDisplayName`、デスクトップ環境フラグ等）。
+3.  **ローカル変数の調整**: `configuration.nix` の `hostname` 等、`home.nix` の `gitEmail` 等を編集。
 4.  **ハードウェア定義**: インストール先で `nixos-generate-config` を実行し、`hardware-configuration.nix` を配置。
 5.  **Flake 登録**: `flake.nix` の `outputs.nixosConfigurations` に新しい定義を追加。
 
